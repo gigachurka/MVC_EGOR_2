@@ -1,0 +1,14 @@
+﻿namespace MVC_EGOR_2.Views.Clubs
+{
+@model IEnumerable<MVC_EGOR.Models.Club>
+
+<ul>
+    @foreach (var club in Model)
+    {
+        <li>
+            <a asp-action="Details" asp-controller="Clubs" asp-route-id="@club.ClubID">@club.ClubName</a>
+        </li>
+    }
+</ul>
+
+}

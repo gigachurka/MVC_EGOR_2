@@ -1,0 +1,27 @@
+﻿namespace MVC_EGOR_2.Views.Clubs
+{
+@model IEnumerable<MVC_EGOR.Models.Roster>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.PlayerName</td>
+                <td>@player.Position</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Players" asp-route-id="@player.PlayerID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+}
