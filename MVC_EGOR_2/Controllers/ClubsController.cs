@@ -1,29 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVC_EGOR_2.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace MVC_EGOR_2.Controllers
 {
     public class ClubsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly DatabaseHelper _dbHelper;
 
-        public ClubsController(AppDbContext context)
+        public ClubsController()
         {
-            _context = context;
+            // Укажите правильный путь к вашей базе данных Access
+            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\path_to\\EGORMVC.accdb";
+            _dbHelper = new DatabaseHelper(connectionString);
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var clubs = await _context.Clubs.ToListAsync();
-            return View(clubs);
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            var players = await _context.Players.Where(p => p.ClubID == id).ToListAsync();
-            return View(players);
+            string query = "SELECT * FROM Clubs";
+            DataTable clubsTable = _dbHelper.ExecuteQuery(query);
+            return View(clubsTable);
         }
     }
-
 }

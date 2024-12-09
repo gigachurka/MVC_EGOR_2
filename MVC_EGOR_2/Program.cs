@@ -1,14 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MVC_EGOR_2.Data;
-using EntityFrameworkCore.Jet; // Подключение библиотеки
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Настройка подключения к Access через Jet
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseJet(builder.Configuration.GetConnectionString("AccessDatabase")));
-
-// Добавление MVC
+// Добавляем сервисы контроллеров с представлениями
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -19,13 +16,16 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+// Пример использования:
+var connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\\\mcb.local\\RoamingProfiles$\\StudentsData\\1227420\\Documents\\EGORMVC.accdb;";
+var dbHelper = new DatabaseHelper(connectionString);
+dbHelper.TestConnection();  // Это проверит соединение с базой данных
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
-// Настройка маршрутов
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
