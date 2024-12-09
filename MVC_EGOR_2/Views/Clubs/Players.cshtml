@@ -15,9 +15,15 @@
         @foreach (var player in Model)
         {
             <tr>
-                <td>@player.PlayerName</td>
-                <td>@player.Position</td>
-                <td><button class="btn btn-primary save-btn" data-id="@player.PlayerID">Сохранить</button></td>
+                <td contenteditable="true" data-id="@player.PlayerID" data-field="PlayerName">
+                    @player.PlayerName
+                </td>
+                <td contenteditable="true" data-id="@player.PlayerID" data-field="Position">
+                    @player.Position
+                </td>
+                <td>
+                    <button class="btn btn-primary save-btn" data-id="@player.PlayerID">Сохранить</button>
+                </td>
             </tr>
         }
     </tbody>
@@ -26,11 +32,13 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const saveButtons = document.querySelectorAll('.save-btn');
+
         saveButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const playerId = this.getAttribute('data-id');
                 const row = this.closest('tr');
                 const fields = row.querySelectorAll('[contenteditable]');
+
                 const data = {};
                 fields.forEach(field => {
                     const fieldName = field.getAttribute('data-field');
@@ -40,7 +48,9 @@
 
                 fetch(`/api/players/update/${playerId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 }).then(response => {
                     if (response.ok) {

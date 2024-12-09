@@ -23,14 +23,20 @@ namespace MVC_EGOR_2.Controllers
         {
             try
             {
-                string query = $"UPDATE Roster SET PlayerName = '{player.PlayerName}', Position = '{player.Position}' WHERE PlayerID = {playerId}";
+                string query = $@"
+            UPDATE Roster
+            SET PlayerName = '{player.PlayerName}',
+                Position = '{player.Position}'
+            WHERE PlayerID = {playerId}";
+
                 _dbHelper.ExecuteNonQuery(query);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
         }
+
     }
 }
