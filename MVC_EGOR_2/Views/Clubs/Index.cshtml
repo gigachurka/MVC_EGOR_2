@@ -1,13 +1,11 @@
-﻿@model List<MVC_EGOR_2.Models.Club>
+﻿@model IEnumerable<MVC_EGOR_2.Models.Club>
 
-<h2>Список клубов</h2>
-<table>
+<h1>Список клубов</h1>
+
+<table class="table">
     <thead>
         <tr>
             <th>Название клуба</th>
-            <th>Описание</th>
-            <th>Локация</th>
-            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -19,8 +17,6 @@
                         @club.ClubName
                     </a>
                 </td>
-                <td>@club.Description</td>
-                <td>@club.Location</td>
             </tr>
         }
     </tbody>

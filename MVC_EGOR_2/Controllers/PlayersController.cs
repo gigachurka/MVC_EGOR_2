@@ -1,33 +1,36 @@
 ﻿
+
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MVC_EGOR_2.Data;
 using MVC_EGOR_2.Models;
+
 namespace MVC_EGOR_2.Controllers
 {
-    public class PlayersController : Controller
+    [Route("api/players")]
+    [ApiController]
+    public class PlayersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly DatabaseHelper _dbHelper;
 
-        public PlayersController(AppDbContext context)
+        public PlayersController(DatabaseHelper dbHelper)
         {
-            _context = context;
+            _dbHelper = dbHelper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        [HttpPost("update/{playerId}")]
+        public IActionResult UpdatePlayer(int playerId, [FromBody] Player player)
         {
-            var player = await _context.Players.FindAsync(id);
-            return View(player);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(Player player)
-        {
-            _context.Update(player);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Clubs", new { id = player.ClubID });
+            try
+            {
+                string query = $"UPDATE Roster SET PlayerName = '{player.PlayerName}', Position = '{player.Position}' WHERE PlayerID = {playerId}";
+                _dbHelper.ExecuteNonQuery(query);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
-
 }

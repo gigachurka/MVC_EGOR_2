@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MVC_EGOR_2.Models.Player>
+
+<h1>Игроки клуба</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Позиция</th>
+            <th>Возраст</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.PlayerName</td>
+                <td>@player.Position</td>
+                <td><button class="btn btn-primary save-btn" data-id="@player.PlayerID">Сохранить</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const saveButtons = document.querySelectorAll('.save-btn');
+        saveButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const playerId = this.getAttribute('data-id');
+                const row = this.closest('tr');
+                const fields = row.querySelectorAll('[contenteditable]');
+                const data = {};
+                fields.forEach(field => {
+                    const fieldName = field.getAttribute('data-field');
+                    const value = field.textContent.trim();
+                    data[fieldName] = value;
+                });
+
+                fetch(`/api/players/update/${playerId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Данные сохранены!');
+                    } else {
+                        alert('Ошибка при сохранении данных.');
+                    }
+                });
+            });
+        });
+    });
+</script>
